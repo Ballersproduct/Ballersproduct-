@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BallersProduct | YOUR GAME. YOUR GEAR.</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f7f7f7;color:#111}
+header{background:#080808;color:white;padding:18px 6%;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+.logo{font-size:25px;font-weight:900;letter-spacing:-1px}
+.logo span{color:#aaa}
+nav{display:flex;gap:20px;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;font-size:13px;font-weight:bold}
+nav a:hover{color:#aaa}
+.cart{background:white;color:black;padding:10px 15px;border:0;border-radius:3px;font-weight:bold;cursor:pointer}
+.hero{background:linear-gradient(90deg,#000b,#0003),url('https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=1600') center/cover;min-height:430px;color:white;display:flex;flex-direction:column;justify-content:center;padding:50px 8%}
+.hero small{letter-spacing:4px;font-weight:bold}
+.hero h1{font-size:clamp(42px,8vw,76px);max-width:700px;margin:15px 0;line-height:.98}
+.hero p{font-size:17px;margin-bottom:25px}
+.btn{background:white;color:black;padding:14px 24px;text-decoration:none;font-weight:bold;display:inline-block;border:0;cursor:pointer;width:max-content}
+section{padding:45px 6%}
+.section-title{font-size:29px;margin-bottom:22px}
+.categories{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.category{height:155px;background:#111;color:white;display:flex;align-items:end;padding:20px;text-decoration:none;font-size:22px;font-weight:bold;position:relative;overflow:hidden}
+.category:hover{background:#333}
+.category span{position:relative}
+.searchrow{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+input,select{padding:13px;border:1px solid #ccc;background:white;font-size:15px}
+input{flex:1;min-width:180px}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
+.product{background:white;padding-bottom:16px}
+.product img{width:100%;height:210px;object-fit:cover;background:#ddd}
+.product-info{padding:14px}
+.product h3{font-size:16px;margin:8px 0}
+.brand{font-size:11px;color:#777;font-weight:bold;letter-spacing:1px}
+.price{font-size:18px;font-weight:bold;margin:10px 0}
+.product button{width:100%;padding:12px;background:#111;color:white;border:0;font-weight:bold;cursor:pointer}
+.product button:hover{background:#444}
+.tag{font-size:11px;background:#eee;padding:5px 8px;display:inline-block}
+.deal{background:#111;color:white;padding:35px;margin:10px 0}
+.deal h2{font-size:30px;margin-bottom:10px}
+footer{background:#080808;color:white;padding:35px 6%;line-height:2}
+footer p{color:#aaa;font-size:13px}
+#cartPanel{display:none;background:white;padding:20px;margin:15px 6%;border:1px solid #ddd}
+#cartPanel button{padding:8px 12px;cursor:pointer}
+.notice{font-size:12px;color:#777;margin-top:15px}
+@media(max-width:600px){header{padding:16px 5%}.hero{min-height:360px;padding:35px 6%}section{padding:32px 5%}.product img{height:180px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">BALLERS<span>PRODUCT</span></div>
+  <nav>
+    <a href="#shop">SHOP</a>
+    <a href="#deals">BALLER DEALS</a>
+    <a href="#resale">BALLER RESALE</a>
+  </nav>
+  <button class="cart" onclick="toggleCart()">VARUKORG (<span id="cartCount">0</span>)</button>
+</header>
+
+<div class="hero">
+  <small>THE FOOTBALL STORE</small>
+  <h1>YOUR GAME.<br>YOUR GEAR.</h1>
+  <p>Utrustningen för nästa nivå av ditt spel.</p>
+  <a class="btn" href="#shop">HANDLA NU</a>
+</div>
+
+<section>
+  <h2 class="section-title">SHOPPA EFTER KATEGORI</h2>
+  <div class="categories">
+    <a class="category" href="#shop" onclick="chooseCategory('Fotbollsskor')"><span>FOTBOLLSSKOR ↗</span></a>
+    <a class="category" href="#shop" onclick="chooseCategory('Fotbollströjor')"><span>FOTBOLLSTRÖJOR ↗</span></a>
+    <a class="category" href="#shop" onclick="chooseCategory('Träning')"><span>TRÄNINGSUTRUSTNING ↗</span></a>
+    <a class="category" href="#shop" onclick="chooseCategory('Tillbehör')"><span>TILLBEHÖR ↗</span></a>
+  </div>
+</section>
+
+<section id="shop">
+  <h2 class="section-title">UPPTÄCK PRODUKTER</h2>
+  <div class="searchrow">
+    <input id="search" placeholder="Sök efter produkter..." oninput="renderProducts()">
+    <select id="categoryFilter" onchange="renderProducts()">
+      <option value="">Alla kategorier</option>
+      <option>Fotbollsskor</option>
+      <option>Fotbollströjor</option>
+      <option>Träning</option>
+      <option>Tillbehör</option>
+    </select>
+    <select id="brandFilter" onchange="renderProducts()">
+      <option value="">Alla märken</option>
+      <option>Nike</option>
+      <option>Adidas</option>
+      <option>Puma</option>
+      <option>Select</option>
+    </select>
+  </div>
+  <div class="products" id="products"></div>
+  <p class="notice">Observera: Produkterna och priserna är exempel i testbutiken. Inga riktiga köp kan genomföras.</p>
+</section>
+
+<section id="deals">
+  <div class="deal">
+    <h2>BALLER DEALS</h2>
+    <p>Hitta utvalda erbjudanden på fotbollsutrustning.</p>
+    <br><a class="btn" href="#shop">SE PRODUKTER</a>
+  </div>
+</section>
+
+<section id="resale">
+  <h2 class="section-title">BALLER RESALE</h2>
+  <p>Ge fotbollsutrustning ett nytt liv. Köp noggrant kontrollerade begagnade produkter till bättre priser.</p>
+  <br>
+  <p><strong>Vår filosofi:</strong> Kontroll före försäljning. Tydliga skickbeskrivningar. Tryggare återbruk.</p>
+  <br><a class="btn" href="mailto:info@ballersproduct.se">KONTAKTA OSS</a>
+</section>
+
+<div id="cartPanel">
+  <h2>Din varukorg</h2>
+  <div id="cartItems"></div>
+  <br><strong id="cartTotal">Totalt: 0 kr</strong>
+  <p class="notice">Detta är en demo-varukorg. Inga betalningar sker.</p>
+  <br><button onclick="toggleCart()">Stäng</button>
+</div>
+
+<footer>
+  <div class="logo">BALLERS<span>PRODUCT</span></div>
+  <p>YOUR GAME. YOUR GEAR.</p>
+  <p>En testbutik för fotbollsspelare.</p>
+  <p>© 2026 BallersProduct</p>
+</footer>
+
+<script>
+const products=[
+{name:"Mercurial Vapor",brand:"Nike",category:"Fotbollsskor",price:899,image:"https://images.unsplash.com/photo-1511886929837-354d827aae26?w=700"},
+{name:"Predator",brand:"Adidas",category:"Fotbollsskor",price:999,image:"https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=700"},
+{name:"Future",brand:"Puma",category:"Fotbollsskor",price:799,image:"https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=700"},
+{name:"Fotbollströja",brand:"Adidas",category:"Fotbollströjor",price:599,image:"https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=700"},
+{name:"Träningströja",brand:"Nike",category:"Fotbollströjor",price:399,image:"https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=700"},
+{name:"Fotboll",brand:"Select",category:"Tillbehör",price:299,image:"https://images.unsplash.com/photo-1614632537190-23e4146777ee?w=700"},
+{name:"Träningskoner",brand:"Select",category:"Träning",price:149,image:"https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=700"},
+{name:"Träningsväst",brand:"Puma",category:"Träning",price:199,image:"https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=700"}
+];
+let cart=[];
+function renderProducts(){
+const search=document.getElementById("search").value.toLowerCase();
+const cat=document.getElementById("categoryFilter").value;
+const brand=document.getElementById("brandFilter").value;
+const filtered=products.filter(p=>
+p.name.toLowerCase().includes(search)&&
+(!cat||p.category===cat)&&(!brand||p.brand===brand));
+document.getElementById("products").innerHTML=filtered.map(p=>`
+<div class="product">
+<img src="${p.image}" alt="${p.name}" loading="lazy">
+<div class="product-info">
+<span class="brand">${p.brand.toUpperCase()}</span>
+<h3>${p.name}</h3>
+<span class="tag">${p.category}</span>
+<div class="price">${p.price} kr</div>
+<button onclick="addToCart('${p.name}')">LÄGG I VARUKORG</button>
+</div>
+</div>`).join("")||"<p>Inga produkter hittades.</p>";
+}
+function chooseCategory(category){
+document.getElementById("categoryFilter").value=category;
+renderProducts();
+}
+function addToCart(name){
+cart.push(name);
+document.getElementById("cartCount").textContent=cart.length;
+renderCart();
+}
+function renderCart(){
+document.getElementById("cartItems").innerHTML=cart.map((name,i)=>
+`<p>${name} <button onclick="removeItem(${i})">Ta bort</button></p>`).join("")||"<p>Varukorgen är tom.</p>";
+let total=cart.reduce((sum,name)=>sum+(products.find(p=>p.name===name)?.price||0),0);
+document.getElementById("cartTotal").textContent="Totalt: "+total+" kr";
+}
+function removeItem(i){
+cart.splice(i,1);
+document.getElementById("cartCount").textContent=cart.length;
+renderCart();
+}
+function toggleCart(){
+const panel=document.getElementById("cartPanel");
+panel.style.display=panel.style.display==="block"?"none":"block";
+renderCart();
+}
+renderProducts();
+</script>
+</body>
+</html>
